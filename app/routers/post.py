@@ -10,8 +10,8 @@ router = APIRouter(prefix="/posts", tags= ['Posts'])
 
 
 # @router.get("/", response_model=List[schemas.Post])
-# @router.get("/", response_model=List[schemas.PostOut])
-@router.get("/")
+@router.get("/", response_model=List[schemas.PostOut])
+# @router.get("/")
 def get_post(db: Session = Depends(get_db),
                 current_user: int = Depends(oauth2.get_current_user),
                     limit: int = 10, skip: int = 0, search: Optional[str] = ""):
@@ -40,14 +40,14 @@ def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db),
     # conn.commit()
     print(current_user.id)
     print(current_user.email)
-    new_post = models.Post(owner_id= current_user.id, **post.dict())
+    new_post = models.Post(owner_id = current_user.id, **post.dict())
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
     return new_post
 
 
-@router.get("/{id}", response_model=schemas.Post)
+@router.get("/{id}", response_model=schemas.PostOut)
 def get_post(id: int, db: Session = Depends(get_db),
                 current_user: int = Depends(oauth2.get_current_user)):
     #post = find_post(id)
@@ -55,16 +55,18 @@ def get_post(id: int, db: Session = Depends(get_db),
     # cursor.execute("""SELECT * FROM posts WHERE id = %s""",(str(id),))
     # post = cursor.fetchone()
 
-    post = db.query(models.Post).filter(models.Post.id == id).first()
+    #post = db.query(models.Post).filter(models.Post.id == id).first()
+    post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
+                        models.Vote, models.Vote.post_id == models.Post.id, isouter =True).group_by(models.Post.id).filter(models.Post.id == id).first()
     if not post:
         # response.status_code = status.HTTP_404_NOT_FOUND
         # return{"message": f"post with id: {id} was not found"}
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
                             detail=f"post with id: {id} was not found")
     
-    if post.owner_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail= "Not authorized to perform requested action")
+    # if post.owner_id != current_user.id:
+    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+    #                         detail= "Not authorized to perform requested action")
     return post
 
 
