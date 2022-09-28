@@ -32,6 +32,6 @@ def test_vote_post_none_exist(authorized_client, test_post):
     assert res.status_code ==  404
 
 
-def test_vote_unauthorized_user(client, test_post):
+def test__unauthorized_user(client, test_post):
     res = client.post("/votes/",json={"post_id": test_post[2].id, "dir": 1})
     assert res.status_code == 401
