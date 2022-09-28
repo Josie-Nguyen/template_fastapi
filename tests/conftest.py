@@ -1,5 +1,4 @@
 from http import client
-from pyexpat import model
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
