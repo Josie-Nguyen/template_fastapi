@@ -92,6 +92,7 @@ jobs:
           username: ${{ secrets.PROD_USERNAME }}
           password: ${{ secrets.PROD_KEY_SSH }} 
           script: |
+            ssh josieng@${{ secrets.PROD_HOST }} -i josieng
             cd app/src
             git pull
             sudo -s systemctl restart api
