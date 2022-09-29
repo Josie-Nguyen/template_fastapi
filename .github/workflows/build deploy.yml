@@ -90,10 +90,10 @@ jobs:
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
-          password: ${{ secrets.PROD_PASSWORD }} 
+          password: ${{ secrets.PROD_KEY_SSH }} 
           script: |
             cd app/src
             git pull
-            echo ${{ secrets.PROD_PASSWORD }} | sudo -s systemctl restart api
+            sudo -s systemctl restart api
 
 
