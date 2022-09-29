@@ -76,7 +76,8 @@ jobs:
     environment: 
       name: production
     steps:
-
+      - name: pulling git repo
+        uses: actions/checkout@v2
       - name: deploying to heroku
         uses: see/heroku-deploy@master # This is the action
         with:
