@@ -90,7 +90,7 @@ jobs:
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
-          key: ${{ secrets.PROD_KEY_SSH }}
+          password: ${{ secrets.PROD_PASSWORD }}
           script: |
             cd app/src
             git pull
