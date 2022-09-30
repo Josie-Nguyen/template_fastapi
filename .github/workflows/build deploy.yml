@@ -75,8 +75,6 @@ jobs:
     needs: [build]
     environment:
       name: production
-    env: 
-      APP_PORT: 8000
     steps:
       # - name: pulling git repo
       #   uses: actions/checkout@v2
