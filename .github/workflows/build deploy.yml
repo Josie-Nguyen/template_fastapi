@@ -75,6 +75,8 @@ jobs:
     needs: [build]
     environment:
       name: production
+    env: 
+      PORT: 8000
     steps:
       # - name: pulling git repo
       #   uses: actions/checkout@v2
